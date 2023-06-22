@@ -1,0 +1,146 @@
+<html lang="en" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پیام رسان فراوین - صفحه چت <%-chatroom.userName%></title>
+
+  <link rel="stylesheet" href="/css/font.css" />
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/chatroom.css">
+  <script src="https://kit.fontawesome.com/4968c04fad.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <section>
+    <div class="container p-5">
+
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="card">
+            <div class="card-body">
+
+              <div class="row">
+                <div style="padding-left:0;padding-right: 7px;" class="seprateTwoSection col-md-6 col-lg-5 col-xl-3">
+                  <div class="p-0">
+                    <div class="sidbarPopup" id="sidbarPopup">
+                    </div>
+                    <div class="input-group rounded mb-0">
+                      <i id="openSidbarPopup" style="cursor:pointer;" class="fa-solid fa-bars fa-xl mt-3 mx-2"></i>
+                      <div class="mt-1 mr-3 ml-2 float-right"><b style="font-size:17px;">پیام رسان فراوین</b></div>
+                      <i id="openAddFormBtn" style="cursor:pointer;" class="fa-solid fa-plus fa-xl mt-3 mr-5 ml-1"></i>
+
+                      <!----------------------------------------Start Add Contact Form----------------------------------------------->
+                      <%if(typeof(errors)!='undefined'){%>
+                        <p id="openedForm" style="display: none;"><%-errors%></p>
+                        <%}%>
+                          <div class="formPopup" id="addForm">
+                            <form action="/addContact" class="formContainer" method="post">
+                              <i id="closeAddFormBtn" class="fa-solid fa-circle-xmark fa-lg closeIcon"></i>
+                              <input type="text" id="contactPhone" name="contactPhone"
+                                value="<%=(typeof inputData!='undefined')? inputData.contactPhone:''%>"
+                                placeholder="شماره همراه" required>
+
+                              <%if(typeof errors!='undefined' && typeof errors.contactPhone!='undefined' ){%>
+                                <p id="errorMsg" class="invlaidInputErrorMessage"><%-errors.contactPhone.msg%></p>
+                                <%}%>
+
+                                  <input type="text" id="contactName" name="contactName"
+                                    value="<%=(typeof inputData!='undefined')? inputData.contactName:''%>"
+                                    placeholder="نام" required>
+
+                                  <%if(typeof errors!='undefined' && typeof errors.contactPhone=='undefined' ){%>
+                                    <p id="errorMsg" class="invlaidInputErrorMessage"><%-errors.otherError.msg%></p>
+                                    <%}%>
+                                      <button type="submit" class="btn">افزودن مخاطب</button>
+                            </form>
+                          </div>
+                          <!----------------------------------------End Add Contact Form------------------------------------------------->
+
+                          <!-- <i style="cursor:pointer;" class="fa-solid fa-arrows-rotate fa-xl mt-3"></i> -->
+                    </div>
+                    <p style="display: none;" id="chatroomsContainerElement"
+                      data-chatrooms='<%=JSON.stringify(chatroom)%>'></p>
+                    <div class="divScroll mt-3" style="position:relative; height: 565px;">
+                      <%if(chatroom.rooms.length>0){%>
+                        <ul id="contact">
+                          <%for(let i=0;i<chatroom.rooms.length;i++){%>
+                            <li class="p-0">
+                              <div class="d-flex flex-row">
+                                <div>
+                                  <i class="fa-solid fa-user fa-xl mt-4 mr-3"></i>
+                                  <span class="badge bg-success badge-dot"></span>
+                                </div>
+                                <div class="p-3">
+                                  <p id="contactName" class="fw-bold mb-0"><%-chatroom.rooms[i].roomName%></p>
+                                  <span id="contactPhone"
+                                    style="display: none;"><%-chatroom.rooms[i].otherSidePhone%></span>
+                                </div>
+                              </div>
+                            </li>
+                            <%}%>
+                        </ul>
+                        <%}%>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="chatSection" class="col-md-6 col-lg-7 col-xl-9">
+                  <div class="row" style="margin-right: -30px;margin-left:10px;">
+                    <div class="col-md-11 mx-5 chatsession-header">
+                      <div class="float-right">
+                        <i style="margin-top: 20px;" class="fa-solid fa-user fa-xl mr-2 ml-2"></i>
+                      </div>
+                      <b style="font-size:16px;margin: 10px 10px 0 0 ;" id="selectedChatroomName"
+                        class="float-right"></b>
+                      <b style="display: none;font-size:16px;margin: 10px 20px 0 0 ;" id="selectedChatroomPhone"
+                        class="float-right"></b>
+                      <div class="float-left">
+                        <i id="openEditFormBtn" style="cursor:pointer;"
+                          class="fa-solid fa-pen-to-square fa-xl mt-3"></i>
+
+                        <!----------------------------------------Start Edit Contact Form----------------------------------------------->
+                        <div class="formPopup" id="editForm">
+                          <form dir="rtl" action="/editContact" class="formContainer" method="post">
+                            <i id="closeEditFormBtn" class="fa-solid fa-circle-xmark fa-lg closeIcon"></i>
+                            <input type="text" id="psw" placeholder="نام" name="contactName" required>
+                            <input style="display: none;" id="editContactPhoneInput" name="contactPhone">
+                            <button type="submit" class="btn">ذخیره</button>
+                          </form>
+                        </div>
+                        <!---------------------------------------- End Edit Contact Form ------------------------------------------------->
+
+                        <a href="/"><i style="cursor:pointer;margin-top:20px;"
+                            class="fa-solid fa-arrows-rotate fa-xl mr-1"></i></a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!---------------------------------- Start Show Message Section -------------------------------------------------------->
+                  <div id="showMessages" class="pt-3 pe-3 divScroll"></div>
+                  <!---------------------------------- End Show Message Section ---------------------------------------------------------->
+                  <button id="clickToSend">click</button>
+                  <div class="text-muted align-items-center inputMessageContainer">
+                    <form style="margin-bottom:0px;" action="/sendMessage" method="post">
+
+                      <br/>
+                      <input style="display: none;" id="whichRoomWannaAddMsg" name="roomId">
+                      <input type="text" class="form-control d-flex" id="MessageInput" name="Message" required
+                        placeholder="پیام خود را وارد کنید">
+                      <button type="submit">send</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </section>
+  <div id="overlay"></div>
+  <script type="module" src="/Js/chatrooms.js"></script>
+  <script type="module" src="/Js/popuForms.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+body {
+    --body-background-color: #d9d5d5;
+    --text-color: black;
+    --card-background-color: white;
+    --card-body-background-color: white;
+    --myself-messages-background-color: #4285f4;
+    --others-messages-background-color: #7ff283;
+    --myself-messages-text-color: white;
+    --others-messages-text-color: black;
+    --message-DateTime-text-color: #262626;
+    --two-section-seprate-border-color: black;
+    --chatSession-header-border-color: black;
+    --scrollbar-track-color: #ffffff;
+    --scrollbar-thumb-color: rgba(48, 121, 244, 0.6);
+    --scrollbar-thumb-hover-color: #3991ef;
+    --contact-li-hover-color: #e3e3e3;
+    --contact-li-selected-color: #3390ec;
+    --contact-li-selected-text-color: #ffffff;
+    --box-shadow-color: rgba(0, 0, 0, 0.16);
+    --form-container-color: #fff;
+    --popupform-input-background-color: #e1e1e1;
+    --popupform-input-color: rgb(0, 0, 0);
+    --popupform-input-placeholder-color: rgb(119, 119, 119);
+    --sendMessage-input-background-color: white;
+    --sendMessage-input-border-color: #242424;
+    --sendMessage-input-text-color: #495057;
+    --sendMessage-input-focus-border-color: #b9b9b9;
+    --sendMessage-input-focus-boxShadow-color: rgba(0, 123, 255, .25);
+    --noMessage-background-color: #c8c8c8;
+    --noMessage-color: rgb(73, 73, 73);
+    background-color: var(--body-background-color);
+    color: var(--text-color);
+}
+
+body.theme-dark {
+    --body-background-color: #434343;
+    --text-color: white;
+    --card-background-color: #262626;
+    --card-body-background-color: #262626;
+    --myself-messages-background-color: #644fa5;
+    --others-messages-background-color: #2937d1;
+    --myself-messages-text-color: white;
+    --others-messages-text-color: white;
+    --message-DateTime-text-color: #e4e0e0;
+    --two-section-seprate-border-color: white;
+    --chatSession-header-border-color: white;
+    --scrollbar-track-color: #262626;
+    --scrollbar-thumb-color: #644fa5;
+    --scrollbar-thumb-hover-color: #4e3b86;
+    --contact-li-hover-color: #a9a1c4;
+    --contact-li-selected-color: #705cab;
+    --contact-li-selected-text-color: #000000;
+    --box-shadow-color: rgba(255, 255, 255, 0.16);
+    --form-container-color: #3a3939;
+    --popupform-input-background-color: #505050;
+    --popupform-input-color: rgb(255, 255, 255);
+    --popupform-input-placeholder-color: rgb(207, 207, 207);
+    --sendMessage-input-background-color: #262626;
+    --sendMessage-input-text-color: #ececec;
+    --sendMessage-input-border-color: #b7b7b7;
+    --sendMessage-input-focus-border-color: #2e2e2e;
+    --sendMessage-input-focus-boxShadow-color: rgba(246, 246, 246, 0.622);
+    --noMessage-background-color: #8b8b8b;
+    --noMessage-color: rgb(215, 215, 215);
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#contact li {
+    /* border-bottom: black solid 1px; */
+    cursor: pointer;
+}
+
+#contact li:hover {
+    background-color: var(--contact-li-hover-color);
+
+}
+
+#contact li.selected {
+    background-color: var(--contact-li-selected-color);
+    color: var(--contact-li-selected-text-color);
+}
+
+.divScroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.card {
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 2px 5px 0 var(--box-shadow-color), 0 2px 10px 0 var(--box-shadow-color);
+}
+
+.card-body {
+    background-color: var(--card-body-background-color);
+    padding: 20px 10px;
+    border: none;
+    border-radius: 20px;
+}
+
+@media(min-width:769px) {
+    .seprateTwoSection {
+        border-left: var(--two-section-seprate-border-color) solid 1px;
+    }
+}
+
+.chatsession-header {
+    border: var(--chatSession-header-border-color) solid 2px;
+    border-radius: 15px;
+    width: 100px;
+    height: 45px;
+}
+
+.othersMessage {
+    font-size: 14px;
+    background-color: var(--others-messages-background-color);
+    color: var(--others-messages-text-color);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    text-align: right;
+}
+
+.mySelfMessage {
+    font-size: 14px;
+    background-color: var(--myself-messages-background-color);
+    color: var(--myself-messages-text-color);
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    text-align: right;
+}
+
+.messagesDateTime {
+    font-size: 11px;
+    color: var(--message-DateTime-text-color);
+
+}
+
+.noMessage {
+    background-color: var(--noMessage-background-color);
+    color: var(--noMessage-color);
+    font-size: 14px;
+}
+
+.showMsg {
+    position: relative;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.invlaidInputErrorMessage {
+    color: red;
+    font-size: 13px;
+    margin: 0;
+}
+
+.alignMyselfMessagesDateTime {
+    text-align: left;
+}
+
+.alignOtherMessagesDateTime {
+    text-align: right;
+}
+
+.sidbarPopup {
+    display: none;
+    position: absolute;
+    top: 27;
+    right: 20;
+    height: 200px;
+    width: 200px;
+    background-color: #333333;
+}
+
+.sidbarPopup ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.form-control {
+    background-color: var(--sendMessage-input-background-color);
+    color: var(--sendMessage-input-text-color);
+    border: 1px solid var(--sendMessage-input-border-color);
+    border-radius: 15px;
+}
+
+.form-control:focus {
+    color: var(--sendMessage-input-text-color);
+    background-color: var(--sendMessage-input-background-color);
+    border-color: var(--sendMessage-input-focus-border-color);
+    outline: 0;
+    box-shadow: 0 0 0 .2rem var(--sendMessage-input-focus-boxShadow-color);
+}
+
+.formPopup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 200ms ease-in-out;
+    /* border: 2px solid #858585; */
+    border-radius: 10px;
+    z-index: 10;
+}
+
+.formPopup.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.formContainer {
+    max-width: 300px;
+    padding: 25px;
+    margin-bottom: 0;
+    background-color: var(--form-container-color);
+    border-radius: 10px;
+}
+
+
+.formContainer input {
+    width: 100%;
+    padding: 15px;
+    margin: 20px 0 10px 50px;
+    border: none;
+    background: var(--popupform-input-background-color);
+    color: var(--popupform-input-color);
+}
+
+.formContainer input:focus {
+    /* background-color: #ddd; */
+    outline: none;
+}
+
+.formContainer input::placeholder {
+    color: var(--popupform-input-placeholder-color);
+}
+
+.closeIcon {
+    margin: -5px -15px 0 0;
+    cursor: pointer;
+    float: right;
+}
+
+.formContainer .btn {
+    padding: 12px 20px;
+    border: none;
+    background-color: #8ebf42;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    margin: 15px 0 15px 15px;
+    opacity: 0.8;
+}
+
+.formContainer .btn:hover,
+.openButton:hover {
+    opacity: 1;
+}
+
+.inputMessageContainer {
+   margin-bottom: -30px;
+}
+
+.sendButton {
+    flex: auto;
+}
+
+#overlay {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    transition: 200ms ease-in-out;
+}
+
+#overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-color);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-color);
+}
+
+#chat3 .form-control {
+    border-color: transparent;
+}
+
+#chat3 .form-control:focus {
+    border-color: transparent;
+    box-shadow: inset 0px 0px 0px 1px transparent;
+}
+
+.badge-dot {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    margin-left: 2.9rem;
+    margin-top: -.75rem;
+}

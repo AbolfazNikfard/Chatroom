@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/login-register.css">
+  <link rel="stylesheet" href="/css/font.css">
+  <script src="https://kit.fontawesome.com/4968c04fad.js" crossorigin="anonymous"></script>
+  <title>Register Form</title>
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="form">
+
+      <form action="/register" method="POST">
+        <input style="margin-right:5px;" type="text" placeholder="نام" name="fname"
+          value="<%=(typeof inputData!='undefined')? inputData.fname:''%>">
+        <p class="invlaidInputErrorMessage">
+          <%=(typeof errors!='undefined' && typeof errors.fname!='undefined' )? errors.fname.msg:''%>
+        </p>
+
+        <input style="margin-right:5px;" type="text" placeholder="شماره همراه" name="phone"
+          value="<%=(typeof inputData!='undefined')? inputData.phone:''%>">
+        <p class="invlaidInputErrorMessage">
+          <%=(typeof errors!='undefined' && typeof errors.phone!='undefined' )? errors.phone.msg:''%>
+        </p>
+
+        <input type="password" placeholder="رمز عبور" id="pass" name="password" />
+        <i id="togglePassword" class="eyeIcon fa-solid fa-eye"></i>
+        <p class="invlaidInputErrorMessage">
+          <%=(typeof errors!='undefined' && typeof errors.password!='undefined' )? errors.password.msg:''%>
+        </p>
+
+        <input type="password" placeholder="تکرار رمز عبور" id="rePass" name="confirmPassword">
+        <i id="toggleRePassword" class="eyeIcon fa-solid fa-eye"></i>
+        <p class="invlaidInputErrorMessage">
+          <%=(typeof errors!='undefined' && typeof errors.confirmPassword!='undefined' )?
+            errors.confirmPassword.msg:''%>
+        </p>
+
+        <p class="invlaidInputErrorMessage">
+          <%=(typeof errors!='undefined' && typeof errors.password=='undefined' && typeof errors.phone=='undefined' &&
+            typeof errors.fname=='undefined' && typeof errors.confirmPassword=='undefined' )? errors:''%>
+        </p>
+        <button type="submit">ثبت نام</button>
+      </form>
+
+    </div>
+  </div>
+
+
+</body>
+<script src="/Js/togglePassword.js"></script>
+
+</html>

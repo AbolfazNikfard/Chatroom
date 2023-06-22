@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/login-register.css">
+  <link rel="stylesheet" href="/css/font.css">
+  <script src="https://kit.fontawesome.com/4968c04fad.js" crossorigin="anonymous"></script>
+  <title>Login Form</title>
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="form">
+
+      <form action="/login" method="POST">
+
+        <% if (message) { %>
+          <p style="color:rgb(10, 218, 10);font-size:13px;"><%-message%></p>
+          <% } %>
+
+            <input style="margin-right:3px;" type="text" placeholder="شماره همراه" name="phone"
+              value="<%=(typeof inputData!='undefined')? inputData.phone:''%>">
+            <p class="invlaidInputErrorMessage">
+              <%=(typeof errors!='undefined' && typeof errors.phone!='undefined' )? errors.phone.msg:''%>
+            </p>
+
+            <input type="password" placeholder="رمز عبور" id="pass" name="password">
+            <i id="togglePassword" class="eyeIcon fa-solid fa-eye"></i>
+            <p class="invlaidInputErrorMessage">
+              <%=(typeof errors!='undefined' && typeof errors.password!='undefined' )? errors.password.msg:''%>
+            </p>
+
+            <p class="invlaidInputErrorMessage">
+              <%=(typeof errors!='undefined' && typeof errors.password=='undefined' && typeof errors.phone=='undefined'
+                )? errors:''%>
+            </p>
+            <button id="submitBtn" type="submit">ورود</button>
+            <p class="message"> ثبت نام نکردید ؟ <a href="/register">ثبت نام</a></p>
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    const togglePassIcon = document.getElementById('togglePassword');
+    const password = document.getElementById('pass');
+
+    togglePassIcon.addEventListener("click", (event) => {
+      let thisElement = document.getElementById('togglePassword');
+      if (password.getAttribute('type') === 'password') {
+        password.setAttribute('type', "text");
+        thisElement.classList.remove("fa-eye");
+        thisElement.classList.add("fa-eye-slash");
+      }
+      else {
+        password.setAttribute('type', "password");
+        thisElement.classList.remove("fa-eye-slash");
+        thisElement.classList.add("fa-eye");
+      }
+    });
+  </script>
+</body>
+
+</html>
