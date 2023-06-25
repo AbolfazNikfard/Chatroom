@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پیام رسان فراوین - صفحه چت <%-chatroom.userName%></title>
+  <title>پیام رسان فراوین - صفحه چت <%=user.name%>
+  </title>
 
   <link rel="stylesheet" href="/css/font.css" />
   <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -28,119 +29,96 @@
                     <div class="sidbarPopup" id="sidbarPopup">
                     </div>
                     <div class="input-group rounded mb-0">
-                      <i id="openSidbarPopup" style="cursor:pointer;" class="fa-solid fa-bars fa-xl mt-3 mx-2"></i>
+                      <i id="openSidbar" style="cursor:pointer;" class="fa-solid fa-bars fa-xl mt-3 mx-2"></i>
+                      <!-- <div style="height:100px;width:100px;position: absolute;margin-top: 30px;">
+                      <ul style="position: absolute;display: inline-block;">
+                        <li style="padding: 15px;position: relative;cursor: pointer;">1</li>
+                        <li style="padding: 15px;position: relative;cursor: pointer;">2</li>
+                      </ul>
+                    </div> -->
                       <div class="mt-1 mr-3 ml-2 float-right"><b style="font-size:17px;">پیام رسان فراوین</b></div>
                       <i id="openAddFormBtn" style="cursor:pointer;" class="fa-solid fa-plus fa-xl mt-3 mr-5 ml-1"></i>
 
                       <!----------------------------------------Start Add Contact Form----------------------------------------------->
-                      <%if(typeof(errors)!='undefined'){%>
-                        <p id="openedForm" style="display: none;"><%-errors%></p>
-                        <%}%>
-                          <div class="formPopup" id="addForm">
-                            <form action="/addContact" class="formContainer" method="post">
-                              <i id="closeAddFormBtn" class="fa-solid fa-circle-xmark fa-lg closeIcon"></i>
-                              <input type="text" id="contactPhone" name="contactPhone"
-                                value="<%=(typeof inputData!='undefined')? inputData.contactPhone:''%>"
-                                placeholder="شماره همراه" required>
 
-                              <%if(typeof errors!='undefined' && typeof errors.contactPhone!='undefined' ){%>
-                                <p id="errorMsg" class="invlaidInputErrorMessage"><%-errors.contactPhone.msg%></p>
-                                <%}%>
+                      <div class="formPopup" id="addForm">
+                        <div class="formContainer">
+                          <i id="closeAddFormBtn" class="fa-solid fa-circle-xmark fa-lg closeIcon"></i>
+                          <input type="text" id="contactPhone" name="contactPhone" placeholder="شماره همراه" required>
+                          <input type="text" id="contactName" name="contactName" placeholder="نام" required>
+                          <p id="errorMsg" class="invlaidInputErrorMessage"></p>
+                          <button id="addContactBtn" class="btn">افزودن مخاطب</button>
+                        </div>
+                      </div>
 
-                                  <input type="text" id="contactName" name="contactName"
-                                    value="<%=(typeof inputData!='undefined')? inputData.contactName:''%>"
-                                    placeholder="نام" required>
+                      <!----------------------------------------End Add Contact Form------------------------------------------------->
 
-                                  <%if(typeof errors!='undefined' && typeof errors.contactPhone=='undefined' ){%>
-                                    <p id="errorMsg" class="invlaidInputErrorMessage"><%-errors.otherError.msg%></p>
-                                    <%}%>
-                                      <button type="submit" class="btn">افزودن مخاطب</button>
-                            </form>
-                          </div>
-                          <!----------------------------------------End Add Contact Form------------------------------------------------->
-
-                          <!-- <i style="cursor:pointer;" class="fa-solid fa-arrows-rotate fa-xl mt-3"></i> -->
                     </div>
-                    <p style="display: none;" id="chatroomsContainerElement"
-                      data-chatrooms='<%=JSON.stringify(chatroom)%>'></p>
-                    <div class="divScroll mt-3" style="position:relative; height: 565px;">
-                      <%if(chatroom.rooms.length>0){%>
-                        <ul id="contact">
-                          <%for(let i=0;i<chatroom.rooms.length;i++){%>
-                            <li class="p-0">
-                              <div class="d-flex flex-row">
-                                <div>
-                                  <i class="fa-solid fa-user fa-xl mt-4 mr-3"></i>
-                                  <span class="badge bg-success badge-dot"></span>
-                                </div>
-                                <div class="p-3">
-                                  <p id="contactName" class="fw-bold mb-0"><%-chatroom.rooms[i].roomName%></p>
-                                  <span id="contactPhone"
-                                    style="display: none;"><%-chatroom.rooms[i].otherSidePhone%></span>
-                                </div>
-                              </div>
-                            </li>
-                            <%}%>
-                        </ul>
-                        <%}%>
-                    </div>
+                    <!-------------------------------------------show contacts section----------------------------------------------->
+                    <div id="contactContainer" class="divScroll mt-3" style="position:relative; height: 565px;"></div>
+
                   </div>
                 </div>
 
+                <!-------------------------------------------start chats section----------------------------------------------------->
                 <div id="chatSection" class="col-md-6 col-lg-7 col-xl-9">
+
+                  <!-------------------------------------------start show chatroom header-------------------------------------------->
+                  <span id="roomId" style="display: none;"></span>
                   <div class="row" style="margin-right: -30px;margin-left:10px;">
                     <div class="col-md-11 mx-5 chatsession-header">
                       <div class="float-right">
                         <i style="margin-top: 20px;" class="fa-solid fa-user fa-xl mr-2 ml-2"></i>
                       </div>
-                      <b style="font-size:16px;margin: 10px 10px 0 0 ;" id="selectedChatroomName"
-                        class="float-right"></b>
-                      <b style="display: none;font-size:16px;margin: 10px 20px 0 0 ;" id="selectedChatroomPhone"
-                        class="float-right"></b>
+                      <b class="float-right chatroomHeader" id="selectedChatroomName"></b>
+                      <b style="display: none;" class="float-right chatroomHeader" id="selectedChatroomPhone"></b>
                       <div class="float-left">
-                        <i id="openEditFormBtn" style="cursor:pointer;"
-                          class="fa-solid fa-pen-to-square fa-xl mt-3"></i>
+                        <i id="openEditFormBtn" style="cursor:pointer;margin-top:18px;"
+                          class="fa-solid fa-pen-to-square fa-xl"></i>
 
-                        <!----------------------------------------Start Edit Contact Form----------------------------------------------->
+                        <!----------------------------------------start Edit Contact Form-------------------------------------------->
                         <div class="formPopup" id="editForm">
-                          <form dir="rtl" action="/editContact" class="formContainer" method="post">
+                          <div dir="rtl" class="formContainer">
                             <i id="closeEditFormBtn" class="fa-solid fa-circle-xmark fa-lg closeIcon"></i>
-                            <input type="text" id="psw" placeholder="نام" name="contactName" required>
-                            <input style="display: none;" id="editContactPhoneInput" name="contactPhone">
-                            <button type="submit" class="btn">ذخیره</button>
-                          </form>
+                            <input type="text" id="editContactNameInput" placeholder="نام" name="contactName">
+                            <p id="messageOfEditContact"></p>
+                            <button id="editContactBtn" class="btn">ذخیره</button>
+                          </div>
                         </div>
-                        <!---------------------------------------- End Edit Contact Form ------------------------------------------------->
+                        <!---------------------------------------- end Edit Contact Form -------------------------------------------->
 
-                        <a href="/"><i style="cursor:pointer;margin-top:20px;"
-                            class="fa-solid fa-arrows-rotate fa-xl mr-1"></i></a>
                       </div>
                     </div>
                   </div>
+                  <!-------------------------------------------end show chatroom header---------------------------------------------->
 
-                  <!---------------------------------- Start Show Message Section -------------------------------------------------------->
-                  <div id="showMessages" class="pt-3 pe-3 divScroll"></div>
-                  <!---------------------------------- End Show Message Section ---------------------------------------------------------->
-                  <button id="clickToSend">click</button>
+                  <!---------------------------------- start Show Message Section --------------------------------------------------->
+                  <span id="myPhone" style="display: none;"><%-user.phone%></span>
+                  <div id="showMessages"></div>
+                  <!---------------------------------- end Show Message Section ----------------------------------------------------->
+
                   <div class="text-muted align-items-center inputMessageContainer">
-                    <form style="margin-bottom:0px;" action="/sendMessage" method="post">
+                    <div style="margin-bottom:0px;">
 
-                      <br/>
+                      <br />
                       <input style="display: none;" id="whichRoomWannaAddMsg" name="roomId">
-                      <input type="text" class="form-control d-flex" id="MessageInput" name="Message" required
+                      <input type="text" class="form-control d-flex" id="sendMessageInput"
                         placeholder="پیام خود را وارد کنید">
-                      <button type="submit">send</button>
-                    </form>
+                      <!-- <i style="margin-left: -20px;" class="fa-light fa-paper-plane"></i> -->
+                      <!-- <button id="sendMessage">send</button> -->
+                    </div>
                   </div>
                 </div>
+                <!-------------------------------------------End chats section------------------------------------------------------->
               </div>
             </div>
           </div>
         </div>
   </section>
   <div id="overlay"></div>
+  <div style="display: none;" id="ErrorMessageBox"><i class="fa-solid fa-circle-exclamation"></i> مشکلی پیش آمده است لطفا بعدا تلاش کنید </div>
   <script type="module" src="/Js/chatrooms.js"></script>
-  <script type="module" src="/Js/popuForms.js"></script>
+  <script type="module" src="/Js/popupForms.js"></script>
 </body>
 
 </html>

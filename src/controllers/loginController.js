@@ -52,7 +52,7 @@ module.exports = {
             }
             catch (err) {
                 console.log("Catched Error : ", err.message);
-                res.redirect("/login");
+                res.status(500)
             }
         }
 

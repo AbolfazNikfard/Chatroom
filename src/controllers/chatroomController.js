@@ -1,139 +1,129 @@
-const { validationResult, matchedData } = require('express-validator');
 const jwt = require("jsonwebtoken");
-const getThisUserChatrooms = require("../dist/getUserChatroomPage");
+const chatroom = require("../utils/chatroomClass")
 const roomModel = require("../models/rooms");
 const userModel = require("../models/users");
-const messageModel = require('../models/messages');
+const messageModel = require("../models/messages");
 
 module.exports = {
-    addContact: (req, res) => {
-        const errors = validationResult(req);
+    getRooms: (req, res) => {
         const token = req.cookies.jwt;
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
-            if (err) {
-                console.log(`Error ${err} Occured On Token Recognize`);
-                res.redirect("/login");
-            }
-            else {
-                try {
-                    const thisUser = await userModel.findOne({ _id: decodedToken.id });
-                    const inputData = matchedData(req);
-                    const contactWannaAddExcistOnDb = await userModel.findOne({ phone: inputData.contactPhone });
-                    const thisUserChatrooms = await getThisUserChatrooms(req);
-                    let errMsg;
-                    if (!errors.isEmpty()) {
-                        errMsg = errors.mapped();
-                        res.render("chatroom.ejs", { errors: errMsg, inputData: inputData, chatroom: thisUserChatrooms });
-                    }
-                    if (contactWannaAddExcistOnDb) {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (_, decodedToken) => {
+            try {
+                const thisUser = await userModel.findById(decodedToken.id);
+                const userRoomsWithContacts = await roomModel.find({ firstUser: thisUser.phone });
+                const user_chatrooms_with_someone_who_may_not_be_among_the_contacts = await roomModel.find({ secondUser: thisUser.phone });
+                const thisUserContacts = thisUser.contact;
+                //console.log("userRoomsWithContact : ", userRoomsWithContacts);
+                //console.log("userRoomsWithUnContact : ", user_chatrooms_with_someone_who_may_not_be_among_the_contacts);
+                //console.log("thisUser Contact : ", thisUserContacts);
+                let userChatrooms = [];
+                for (let i = 0; i < userRoomsWithContacts.length; i++) {
+                    const thisContact = thisUserContacts.find(({ Cphone }) => Cphone == userRoomsWithContacts[i].secondUser);
+                    userChatrooms.push(new chatroom(
+                        userRoomsWithContacts[i].id,
+                        thisContact.Cname,
+                        thisContact.Cphone
+                    ));
+                }
+                for (let i = 0; i < user_chatrooms_with_someone_who_may_not_be_among_the_contacts.length; i++) {
 
-                        const excistOnContactList = await userModel.findOne({ _id: thisUser._id, contact: { $elemMatch: { Cphone: inputData.contactPhone } } })
-                        if (excistOnContactList) {
-                            errMsg = {
-                                otherError: {
-                                    msg: "مخاطب از قبل اضافه شده است"
-                                }
-                            }
-                            res.render("chatroom.ejs", { errors: errMsg, inputData: inputData, chatroom: thisUserChatrooms });
-                        }
-                        else {
-                            const contactList = thisUser.contact;
-                            contactList.push({
-                                Cname: inputData.contactName,
-                                Cphone: inputData.contactPhone
-                            });
-                            const updateContactListStatus = await userModel.updateOne({ phone: thisUser.phone }, { contact: contactList });
-                            const newRoom = new roomModel({
-                                firstUser: thisUser.phone,
-                                secondUser: inputData.contactPhone
-                            })
-                            let newRoomAddResult;
-                            if (!await roomModel.findOne({ firstUser: inputData.contactPhone, secondUser: thisUser.phone })) {
-                                newRoomAddResult = await newRoom.save();
-                            }
-                            console.log("updateOperationStatus : ", updateContactListStatus);
-                            console.log("newRoomAddedResult : ", newRoomAddResult);
-                            res.redirect("/");
-                        }
+                    const phone_of_user_that_maybe_isnt_contact = user_chatrooms_with_someone_who_may_not_be_among_the_contacts[i].firstUser;
+                    const user_that_maybe_isnt_contact = await userModel.findOne({ phone: phone_of_user_that_maybe_isnt_contact });
+                    const IsContact = thisUserContacts.find(({ Cphone }) => Cphone == phone_of_user_that_maybe_isnt_contact);
+                    roomId = user_chatrooms_with_someone_who_may_not_be_among_the_contacts[i]._id;
+                    if (IsContact) {
+                        userChatrooms.push(new chatroom(
+                            roomId,
+                            IsContact.Cname,
+                            IsContact.Cphone,
+                        ));
                     }
                     else {
-                        errMsg = {
-                            otherError: {
-                                msg: "مخاطب وارد شده در پیامرسان ثبت نام نکرده است"
-                            }
-                        }
-                        res.render("chatroom.ejs", { errors: errMsg, inputData: inputData, chatroom: thisUserChatrooms });
+                        userChatrooms.push(new chatroom(
+                            roomId,
+                            user_that_maybe_isnt_contact.name
+                        ));
                     }
                 }
-                catch (err) {
-                    console.log("Catched Error : " + err.message);
-                    res.redirect("/");
-                }
+                res.send({
+                    statusCode: 200,
+                    chatrooms: userChatrooms.sort((a, b) => a.roomName.localeCompare(b.roomName))
+                })
             }
-        });
-    },
-    editContact: (req, res) => {
-        const token = req.cookies.jwt;
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
-            if (err) {
-                console.log(`Error ${err} Occured On Token Recognize`);
-                res.redirect("/login");
-            }
-            else {
-                try {
-                    const thisUser = await userModel.findById(decodedToken.id);
-                    const contactList = thisUser.contact;
-                    const editUserPhone = req.body.contactPhone
-                    console.log("contactList: ", contactList);
-                    console.log("Edit contact request body: ", req.body);
-                    console.log("contact phone: ", editUserPhone);
-                    const contactSelected = contactList.find((contact) => contact.Cphone === editUserPhone);
-                    console.log("contact selected: ", contactSelected);
-                    if (contactSelected) {
-                        const contactSelectedIndex = contactList.find((contact) => contact.Cphone === editUserPhone);
-                        contactSelected.Cname = req.body.contactName;
-                        contactList[contactSelectedIndex] = contactSelected;
-
-                        const editContactResult = await userModel.updateOne({ _id: thisUser._id }, { contact: contactList });
-                        console.log("result Of Edit Contact Name: ", editContactResult);
-                        res.redirect("/");
-                    }
-                    else {
-                        res.send({
-                            error:"contact not found"
-                        });
-                    }
-                }
-                catch (err) {
-                    console.log("Catched Error : " + err.message);
-                    res.redirect("/");
-                }
+            catch (err) {
+                console.log("catched Error: ", err)
+                res.status(500).send({
+                    statusCode: 500,
+                    message: "Internal Server Error"
+                })
             }
         })
     },
+    getmessages: async (req, res) => {
+        const { roomId } = req.params;
+        if (!roomId)
+            res.status(400).send({
+                statusCode: 400,
+                message: "Bad request"
+            });
+        else {
+            try {
+                const room = await roomModel.findById(roomId);
+                if (!room) {
+                    res.status(404).send({
+                        statusCode: 404,
+                        message: "room not found"
+                    })
+                }
+                else {
+                    const roomMessages = await messageModel.find({ roomFk: roomId });
+                    res.send({
+                        statusCode: 200,
+                        messages: roomMessages
+                    })
+                }
+            }
+            catch (err) {
+                res.status(500).send({
+                    statusCode: 500,
+                    message: "Internal Server Error"
+                })
+            }
+        }
+    },
     sendMessage: (req, res) => {
         const token = req.cookies.jwt;
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
-            if (err) {
-                console.log(`Error ${err} Occured On Token Recognize`);
-                res.redirect("/login");
-            }
-            else {
-                try {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (_, decodedToken) => {
+
+            try {
+                console.log("body: ", req.body);
+                const { message, roomId } = req.body;
+                if (!message || !roomId)
+                    res.status(400).send({
+                        statusCode: 400,
+                        message: "Bad request"
+                    });
+                else {
                     const thisUser = await userModel.findById(decodedToken.id);
                     const newMessage = new messageModel({
-                        roomFk: req.body.roomId,
+                        roomFk: roomId,
                         userFk: thisUser.phone,
-                        message: req.body.Message
+                        message: message
                     });
                     const addNewMessageResult = await newMessage.save();
                     console.log(`new Message ${addNewMessageResult} Added`);
-                    res.redirect("/");
+                    res.send({
+                        statusCode: 200,
+                        message: "message added"
+                    });
                 }
-                catch (err) {
-                    console.log("Catched Error : " + err.message);
-                    res.redirect("/");
-                }
+            }
+            catch (err) {
+                console.log("Catched Error : ", err.message);
+                res.status(500).send({
+                    statusCode: 500,
+                    message: "Internal Server Error"
+                });
             }
         })
     }

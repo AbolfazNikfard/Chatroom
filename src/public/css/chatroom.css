@@ -70,17 +70,17 @@ ul {
     padding: 0;
 }
 
-#contact li {
+#chatrooms li {
     /* border-bottom: black solid 1px; */
     cursor: pointer;
 }
 
-#contact li:hover {
+#chatrooms li:hover {
     background-color: var(--contact-li-hover-color);
 
 }
 
-#contact li.selected {
+#chatrooms li.selected {
     background-color: var(--contact-li-selected-color);
     color: var(--contact-li-selected-text-color);
 }
@@ -117,7 +117,10 @@ ul {
     width: 100px;
     height: 45px;
 }
-
+.chatroomHeader{
+    font-size:16px;
+    margin: 10px 10px 0 0 ;
+}
 .othersMessage {
     font-size: 14px;
     background-color: var(--others-messages-background-color);
@@ -157,13 +160,29 @@ ul {
     justify-content: center;
     align-items: center;
 }
-
-.invlaidInputErrorMessage {
+#ErrorMessageBox{
+    position: fixed;
+    padding: 10px;
+    top:5;
+    left: 50%;
+    width: 200px;
+    border-radius: 20px;
+    background-color: #EF4444;
+    color: white;
+    box-shadow: 0 0 0 .1rem rgb(237, 170, 170);
+    transform: translate(-50%);
+    transition: 1000ms ease-in-out
+}
+.ErrorMessage {
     color: red;
     font-size: 13px;
     margin: 0;
 }
-
+.showSuccessfullMessage {
+    color: rgb(2, 163, 2);
+    font-size: 13px;
+    margin: 0;
+}
 .alignMyselfMessagesDateTime {
     text-align: left;
 }

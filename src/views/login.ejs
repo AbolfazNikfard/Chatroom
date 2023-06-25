@@ -21,26 +21,30 @@
           <p style="color:rgb(10, 218, 10);font-size:13px;"><%-message%></p>
           <% } %>
 
-            <input style="margin-right:3px;" type="text" placeholder="شماره همراه" name="phone"
+            <input style="margin-right:3px;" type="text" placeholder="شماره همراه" name="phone" required
               value="<%=(typeof inputData!='undefined')? inputData.phone:''%>">
-            <p class="invlaidInputErrorMessage">
-              <%=(typeof errors!='undefined' && typeof errors.phone!='undefined' )? errors.phone.msg:''%>
-            </p>
+            <%if(typeof errors!='undefined' && typeof errors.phone!='undefined' ){%>
+              <p class="invlaidInputErrorMessage">
+                <%=errors.phone.msg%>
+              </p>
+              <%}%>
 
-            <input type="password" placeholder="رمز عبور" id="pass" name="password">
-            <i id="togglePassword" class="eyeIcon fa-solid fa-eye"></i>
-            <p class="invlaidInputErrorMessage">
-              <%=(typeof errors!='undefined' && typeof errors.password!='undefined' )? errors.password.msg:''%>
-            </p>
-
-            <p class="invlaidInputErrorMessage">
-              <%=(typeof errors!='undefined' && typeof errors.password=='undefined' && typeof errors.phone=='undefined'
-                )? errors:''%>
-            </p>
-            <button id="submitBtn" type="submit">ورود</button>
-            <p class="message"> ثبت نام نکردید ؟ <a href="/register">ثبت نام</a></p>
+                <input type="password" placeholder="رمز عبور" id="pass" name="password" required>
+                <i id="togglePassword" class="eyeIcon fa-solid fa-eye"></i>
+                <%if(typeof errors!='undefined' && typeof errors.password!='undefined' ){%>
+                  <p class="invlaidInputErrorMessage">
+                    <%=errors.password.msg%>
+                  </p>
+                  <%}%>
+                    <%if(typeof errors!='undefined' && typeof errors.password=='undefined' && typeof
+                      errors.phone=='undefined' ){%>
+                      <p class="invlaidInputErrorMessage">
+                        <%=errors%>
+                      </p>
+                      <%}%>
+                        <button id="submitBtn" type="submit">ورود</button>
+                        <p class="message"> ثبت نام نکردید ؟ <a href="/register">ثبت نام</a></p>
       </form>
-
     </div>
   </div>
 

@@ -27,9 +27,11 @@ async function startServer() {
     const registerRouter = require('./src/routes/registerRouter');
     const logoutRouter = require("./src/routes/logoutRouter");
     const chatroomRouter = require("./src/routes/chatroomRouter");
+    const contactRouter = require("./src/routes/contactRouter");
     app.use("/login", loginRouter);
     app.use("/register", registerRouter);
     app.use("/logout", logoutRouter);
+    app.use("/contact", contactRouter);
     app.use("/", chatroomRouter);
     app.get("/home", (_, res) => {
       res.redirect("/");
