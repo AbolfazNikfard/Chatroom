@@ -16,8 +16,8 @@ router.get("/", checkNotAuthenticated, async (req, res) => {
     catch (err) {
         console.log("Catched Error : " + err.message);
         res.status(500).send({
-            status: 500,
-            error: "Internal Server"
+            statusCode: 500,
+            message: "Internal server error"
         });
     }
 });

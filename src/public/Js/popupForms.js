@@ -8,7 +8,7 @@ const closeAddPopupForm = document.getElementById("closeAddFormBtn");
 const closeEditPopupForm = document.getElementById("closeEditFormBtn");
 const addErrorMessagesElement = document.getElementById("errorMsg");
 const editContactMessage = document.getElementById("messageOfEditContact");
-const sidbarBtn = document.getElementById("openSidbar");
+const changeThemeBtn = document.getElementById("changeTheme");
 const addContactButton = document.getElementById("addContactBtn");
 const editContactButton = document.getElementById("editContactBtn");
 const add_Contact_Phone_Input = document.getElementById("contactPhone");
@@ -17,7 +17,7 @@ const edit_Contact_Name_Input = document.getElementById("editContactNameInput");
 const contactPhone = document.getElementById("selectedChatroomPhone");
 //#endregion
 //#region Event Listeners
-sidbarBtn.addEventListener("click", () => {
+changeThemeBtn.addEventListener("click", () => {
     if (document.body.classList.contains("theme-dark")) {
         document.body.classList.remove("theme-dark")
     }

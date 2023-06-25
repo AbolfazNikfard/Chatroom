@@ -52,7 +52,10 @@ module.exports = {
             }
             catch (err) {
                 console.log("Catched Error : ", err.message);
-                res.status(500)
+                res.status(500).send({
+                    statusCode:500,
+                    message:"Internal server error"
+                })
             }
         }
 

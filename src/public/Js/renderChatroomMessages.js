@@ -5,7 +5,9 @@ export default function showRoomMessages(messages) {
         chatroomMessagesContainer.removeChild(chatroomMessagesContainer.firstChild);
 
     const chatroomMessages = document.createElement("div");
-    chatroomMessages.classList.add("divScroll","pt-3","pe-3");
+    chatroomMessages.classList.add("divScroll", "pt-3", "pe-3");
+    chatroomMessages.style.position = 'relative';
+    chatroomMessages.style.height = "500px";
     chatroomMessagesContainer.appendChild(chatroomMessages);
 
     const thisUserPhone = document.getElementById("myPhone").innerText;

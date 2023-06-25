@@ -5,6 +5,6 @@ const registerValidationRules = require('../middlewares/registerValidationRules'
 const checkAuth = require("../middlewares/checkAuthenticated")
 const userModel = require('../models/users');
 router.get("/", checkAuth, registerController.userForm);
-router.post("/", checkAuth, registerValidationRules.form, registerController.validateForm)
+router.post("/", checkAuth, registerValidationRules.form, registerController.register)
 
 module.exports = router;

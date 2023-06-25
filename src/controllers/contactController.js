@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/users");
 const roomModel = require("../models/rooms");
-
 module.exports = {
     addContact: (req, res) => {
         const token = req.cookies.jwt;
@@ -31,18 +30,19 @@ module.exports = {
                             Cphone: contactPhone
                         })
                         const updateContactListResult = await userModel.updateOne({ phone: thisUser.phone }, { contact: userContacts });
-                        console.log("updateOperationStatus : ", updateContactListResult);
+                        //console.log("updateOperationStatus : ", updateContactListResult);
                         if (!await roomModel.findOne({ firstUser: contactPhone, secondUser: thisUser.phone })) {
                             const newRoom = new roomModel({
                                 firstUser: thisUser.phone,
                                 secondUser: contactPhone
                             })
                             const newRoomAddResult = await newRoom.save();
-                            console.log("newRoomAddedResult : ", newRoomAddResult);
+                            //console.log("newRoomAddedResult : ", newRoomAddResult);
                         }
 
                         res.send({
-                            statusCode: 200
+                            statusCode: 200,
+                            message: "Contact added"
                         })
                     }
                 }
@@ -51,7 +51,7 @@ module.exports = {
                 console.log("catched error: ", err.message)
                 res.status(500).send({
                     statusCode: 500,
-                    message: "Internal Server Error"
+                    message: "Internal server error"
                 })
             }
         })
@@ -63,9 +63,9 @@ module.exports = {
                 const thisUser = await userModel.findById(decodedToken.id);
                 const contactList = thisUser.contact;
                 const { contactPhone, contactNewName } = req.body;
-                console.log("contactList: ", contactList);
+                //console.log("contactList: ", contactList);
                 const contactSelected = contactList.find((contact) => contact.Cphone === contactPhone);
-                console.log("contact selected: ", contactSelected);
+                //console.log("contact selected: ", contactSelected);
                 if (contactSelected) {
                     const contactSelectedIndex = contactList.find((contact) => contact.Cphone === contactPhone);
                     contactSelected.Cname = contactNewName;
@@ -75,7 +75,7 @@ module.exports = {
 
                     res.send({
                         statusCode: 200,
-                        message: "نام مخاطب تغییر یافت"
+                        message: "Contact edited"
                     });
                 }
                 else {

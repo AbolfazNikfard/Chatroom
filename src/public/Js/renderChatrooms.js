@@ -85,6 +85,11 @@ export default function renderChatrooms(rooms) {
         liElement.appendChild(containerDivElement);
 
         liElement.addEventListener('click', async () => {
+            for (let i = 0; i < chatroomsList.childElementCount; i++)
+                if (chatroomsList.children[i].classList.contains("selected"))
+                    chatroomsList.children[i].classList.remove("selected");
+
+            liElement.classList.add("selected");
             roomIdContainerElement.innerText = room.roomId;
             chatSectionElement.style.display = "block";
             if (room.otherSidePhone == undefined)

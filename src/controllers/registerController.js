@@ -5,16 +5,16 @@ module.exports = {
     userForm: function (_, res) {
         res.render('register.ejs');
     },
-    validateForm: (req, res) => {
+    register: (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const errMsg = errors.mapped();
-            var inputData = matchedData(req);
+            const inputData = matchedData(req);
             res.render('register.ejs', { errors: errMsg, inputData: inputData });
         }
         else {
 
-            var inputData = matchedData(req);
+            const inputData = matchedData(req);
             userModel.findOne({ phone: inputData.phone })
                 .then((foundedUser) => {
                     if (foundedUser) {
@@ -39,7 +39,7 @@ module.exports = {
                                         console.log("Catched Error : ", err.message);
                                         res.status(400).send({
                                             status: 400,
-                                            error: "Bad Request"
+                                            message: "Bad request"
                                         });
                                     })
                             })
@@ -47,7 +47,7 @@ module.exports = {
                                 console.log("Catched Error : ", err.message);
                                 res.status(500).send({
                                     status: 500,
-                                    error: "Internal Server"
+                                    message: "Internal server error"
                                 });
                             })
                     }
@@ -56,7 +56,7 @@ module.exports = {
                     console.log("Catched Error : ", err.message);
                     res.status(500).send({
                         status: 500,
-                        error: "Internal Server"
+                        error: "Internal server error"
                     });
                 })
         }

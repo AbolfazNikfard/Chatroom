@@ -54,7 +54,7 @@ module.exports = {
                 console.log("catched Error: ", err)
                 res.status(500).send({
                     statusCode: 500,
-                    message: "Internal Server Error"
+                    message: "Internal server error"
                 })
             }
         })
@@ -72,7 +72,7 @@ module.exports = {
                 if (!room) {
                     res.status(404).send({
                         statusCode: 404,
-                        message: "room not found"
+                        message: "Room not found"
                     })
                 }
                 else {
@@ -86,7 +86,7 @@ module.exports = {
             catch (err) {
                 res.status(500).send({
                     statusCode: 500,
-                    message: "Internal Server Error"
+                    message: "Internal server error"
                 })
             }
         }
@@ -96,7 +96,7 @@ module.exports = {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (_, decodedToken) => {
 
             try {
-                console.log("body: ", req.body);
+                //console.log("body: ", req.body);
                 const { message, roomId } = req.body;
                 if (!message || !roomId)
                     res.status(400).send({
@@ -111,10 +111,10 @@ module.exports = {
                         message: message
                     });
                     const addNewMessageResult = await newMessage.save();
-                    console.log(`new Message ${addNewMessageResult} Added`);
+                    //console.log(`new Message ${addNewMessageResult} Added`);
                     res.send({
                         statusCode: 200,
-                        message: "message added"
+                        message: "Message added"
                     });
                 }
             }
@@ -122,7 +122,7 @@ module.exports = {
                 console.log("Catched Error : ", err.message);
                 res.status(500).send({
                     statusCode: 500,
-                    message: "Internal Server Error"
+                    message: "Internal server error"
                 });
             }
         })
